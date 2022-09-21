@@ -198,8 +198,28 @@ function addQuestionsData(data, count) {
     fragment.appendChild(qTitle);
     qArea.appendChild(fragment);
 
-    // Adding answers to answers area
+    /* 
+      For random answers
+    */
+    let answerArr = [];
     for (let i = 1; i <= 4; i++) {
+      answerArr.push(data[`answer_${i}`]);
+    }
+
+    let ranAnswer = [],
+      i = answerArr.length,
+      j = 0;
+
+    while (i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      ranAnswer.push(answerArr[j]);
+      answerArr.splice(j, 1);
+    }
+
+    /* 
+      Adding answers to answers area
+    */
+    for (let i = 0; i < 4; i++) {
       let mainDiv = document.createElement("div");
       mainDiv.classList = "answer";
 
@@ -208,7 +228,7 @@ function addQuestionsData(data, count) {
       answerInput.type = "radio";
       answerInput.name = "questions";
       answerInput.id = `answer_${i}`;
-      answerInput.dataset.answer = `${data[`answer_${i}`]}`;
+      answerInput.dataset.answer = `${ranAnswer[i]}`;
       if (i === 1) {
         answerInput.checked = true;
       }
@@ -218,7 +238,7 @@ function addQuestionsData(data, count) {
       inputsLable.htmlFor = `answer_${i}`;
 
       // Create Label Text
-      let inputsLableText = document.createTextNode(data[`answer_${i}`]);
+      let inputsLableText = document.createTextNode(`${ranAnswer[i]}`);
       inputsLable.appendChild(inputsLableText);
 
       // Adding input & label to mainDiv, and mainDiv to the fragment then to answers area
@@ -226,7 +246,6 @@ function addQuestionsData(data, count) {
       mainDiv.appendChild(inputsLable);
       answersArea.appendChild(mainDiv);
     }
-
     // Adding to Q. area div
     fragment.appendChild(answersArea);
     qArea.appendChild(fragment);
