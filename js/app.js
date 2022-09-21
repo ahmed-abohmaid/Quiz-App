@@ -229,7 +229,7 @@ function addQuestionsData(data, count) {
       answerInput.name = "questions";
       answerInput.id = `answer_${i}`;
       answerInput.dataset.answer = `${ranAnswer[i]}`;
-      if (i === 1) {
+      if (i === 0) {
         answerInput.checked = true;
       }
 
