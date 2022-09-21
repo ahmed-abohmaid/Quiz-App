@@ -304,7 +304,7 @@ function showResults(count) {
       resultsInfo.classList.add("perfect");
       answeredCounter.innerHTML = `You Answered ${correctAnswer} Of ${count}`;
     } else {
-      resultsInfo.innerHTML = `Bad`;
+      resultsInfo.innerHTML = `Don't worry, you can try again`;
       resultsInfo.classList.add("bad");
       answeredCounter.innerHTML = `You Answered ${correctAnswer} Of ${count}`;
     }
