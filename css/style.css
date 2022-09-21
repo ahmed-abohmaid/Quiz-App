@@ -259,4 +259,9 @@ span.q-timer {
   color: #dc0a0a;
 }
 
+footer p {
+  text-align: center;
+  font-size: 14px;
+}
+
 /* End Quiz Styling*/
