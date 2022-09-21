@@ -1,4 +1,5 @@
 // Get elements
+let welcomeDiv = document.querySelector(".welcome")
 let questionCounte = document.querySelector(
   ".questions-counter .questions-count"
 );
@@ -17,6 +18,52 @@ let currentIndex = 0;
 let correctAnswer = 0;
 let countdownInterval;
 let countdownTimer = 60;
+
+// For Performance
+let fragment = document.createDocumentFragment();
+
+// Btn To Start Quiz
+function startQuiz() {
+  qArea.style.display = "none";
+  answersArea.style.display = "none";
+  theBullets.style.display = "none";
+  submitButton.innerHTML = "Start Quiz";
+
+  // Create Quiz Info
+  // Welcome Msg
+  let welcomeInfo =  document.createElement("div");
+  welcomeInfo.classList = "info"
+  let welcomeInfoMsg = document.createTextNode("Welcome");
+  welcomeInfo.appendChild(welcomeInfoMsg);
+  
+  // Info Msg for quiz
+  let infoMsgDiv = document.createElement("div");
+  let infoMsg = document.createTextNode("Notice that this quiz has a timer");
+  infoMsgDiv.appendChild(infoMsg);
+
+  // Q. Timer
+  let timer = document.createElement("span");
+  timer.classList = "q-timer";
+  let timerMsg = document.createTextNode(`Each Question ${countdownTimer} Sec.`);
+  timer.appendChild(timerMsg);
+  infoMsgDiv.appendChild(timer);
+
+  // Add to fragment then body
+  fragment.appendChild(welcomeInfo);
+  fragment.appendChild(infoMsgDiv);
+  welcomeDiv.appendChild(fragment);
+
+  // Click
+  submitButton.onclick = function () {
+    qArea.style.display = "block";
+    answersArea.style.display = "block";
+    theBullets.style.display = "flex";
+    submitButton.innerHTML = "Submit";
+    welcomeDiv.remove();
+    getQuestion();
+  }
+}
+startQuiz();
 
 // Start fetch our json file
 async function getQuestion() {
@@ -66,10 +113,6 @@ async function getQuestion() {
     console.log(err);
   }
 }
-getQuestion();
-
-// For Performance
-let fragment = document.createDocumentFragment();
 
 // create bullets & Adding questions-count
 function creatbullets(num) {
