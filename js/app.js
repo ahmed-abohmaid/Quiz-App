@@ -1,5 +1,7 @@
-// Get elements
-let welcomeDiv = document.querySelector(".welcome")
+/* 
+  Get elements
+*/
+let welcomeDiv = document.querySelector(".welcome");
 let questionCounte = document.querySelector(
   ".questions-counter .questions-count"
 );
@@ -13,16 +15,22 @@ let resultsInfo = document.querySelector(".results .info");
 let answeredCounter = document.querySelector(".results .answere-counter");
 let countdownElement = document.querySelector(".timer");
 
-// Set Options
+/* 
+  Set Options
+*/
 let currentIndex = 0;
 let correctAnswer = 0;
 let countdownInterval;
 let countdownTimer = 60;
 
-// For Performance
+/* 
+  For Performance
+*/
 let fragment = document.createDocumentFragment();
 
-// Btn To Start Quiz
+/* 
+  Start Quiz
+*/
 function startQuiz() {
   qArea.style.display = "none";
   answersArea.style.display = "none";
@@ -31,11 +39,11 @@ function startQuiz() {
 
   // Create Quiz Info
   // Welcome Msg
-  let welcomeInfo =  document.createElement("div");
-  welcomeInfo.classList = "info"
+  let welcomeInfo = document.createElement("div");
+  welcomeInfo.classList = "info";
   let welcomeInfoMsg = document.createTextNode("Welcome");
   welcomeInfo.appendChild(welcomeInfoMsg);
-  
+
   // Info Msg for quiz
   let infoMsgDiv = document.createElement("div");
   let infoMsg = document.createTextNode("Notice that this quiz has a timer");
@@ -44,7 +52,9 @@ function startQuiz() {
   // Q. Timer
   let timer = document.createElement("span");
   timer.classList = "q-timer";
-  let timerMsg = document.createTextNode(`Each Question ${countdownTimer} Sec.`);
+  let timerMsg = document.createTextNode(
+    `Each Question ${countdownTimer} Sec.`
+  );
   timer.appendChild(timerMsg);
   infoMsgDiv.appendChild(timer);
 
@@ -53,19 +63,22 @@ function startQuiz() {
   fragment.appendChild(infoMsgDiv);
   welcomeDiv.appendChild(fragment);
 
-  // Click
+  // Click btn to start
   submitButton.onclick = function () {
     qArea.style.display = "block";
     answersArea.style.display = "block";
     theBullets.style.display = "flex";
-    submitButton.innerHTML = "Submit";
+    submitButton.innerHTML = "Next";
     welcomeDiv.remove();
     getQuestion();
-  }
+  };
 }
 startQuiz();
 
-// Start fetch our json file
+/* 
+  Start fetch our json file
+  convert JSON data to object data
+*/
 async function getQuestion() {
   try {
     let myData = await fetch("html_questions.json");
@@ -74,39 +87,78 @@ async function getQuestion() {
     let objectData = await myData.json();
     let count = objectData.length;
 
-    // Start create bullets & Adding questions-count
+    /* 
+      Start create bullets & Adding questions-count
+    */
     creatbullets(count);
 
-    // Start Adding Questions
-    addQuestionsData(objectData[currentIndex], count);
+    /* 
+      Start Adding Questions rondomly
+      Delete finished answer and make random index agian
+    */
+    // For random
+    let randomIndex = Math.floor(Math.random() * count);
+    let ranquestion = objectData[randomIndex];
+    addQuestionsData(ranquestion, count);
+    // Delete finished answer and make random index agian
+    objectData.splice(objectData.indexOf(ranquestion), 1);
 
-    // Set countdown Timer
+    /* 
+      Set countdown Timer
+    */
     countdown(countdownTimer, count);
 
-    // Start dealing with submit btn
+    /* 
+    Start dealing with submit btn
+    */
     submitButton.onclick = () => {
       // Get the right answer
-      let rAnswer = objectData[currentIndex].right_answer;
+      let rAnswer = ranquestion.right_answer;
 
       // increase index
       currentIndex++;
 
-      // Check the answer
+      /* 
+        Check If answer right and if right icrease right answer variable to show the result 
+      */
       checkAnswer(rAnswer);
 
-      // Go to next Q.
+      /*
+        Empty old question area to avoid duplicating
+        Go to next Q.
+        make random index agian with new length and Delete finished answer 
+      */
       qArea.innerHTML = "";
       answersArea.innerHTML = "";
-      addQuestionsData(objectData[currentIndex], count);
 
-      // Set countdown Timer
+      // Delete finished answer
+      let newCount = objectData.length;
+      randomIndex = Math.floor(Math.random() * newCount);
+      ranquestion = objectData[randomIndex];
+      addQuestionsData(ranquestion, count);
+      objectData.splice(objectData.indexOf(ranquestion), 1);
+
+      /* 
+        Set countdown Timer
+      */
       clearInterval(countdownInterval);
       countdown(countdownTimer, count);
 
-      // Handle bullets & answere-counter while going to the next Q.
+      /* 
+        Handle bullets & answere-counter while going to the next Q.
+      */
       handlebullets();
 
-      // Show Results
+      /* 
+        Convert Next btn to submit btn
+      */
+      if (currentIndex === count - 1) {
+        submitButton.innerHTML = "Submit";
+      }
+
+      /* 
+        Show Results
+      */
       showResults(count);
     };
   } catch (err) {
@@ -114,7 +166,9 @@ async function getQuestion() {
   }
 }
 
-// create bullets & Adding questions-count
+/* 
+  create bullets & Adding questions-count
+*/
 function creatbullets(num) {
   // Adding bullets
   for (let i = 0; i < num; i++) {
@@ -130,8 +184,9 @@ function creatbullets(num) {
   questionCounte.innerHTML = `${num}`;
 }
 
-// Questions => Q.
-// Adding Q.
+/* 
+  Adding questions to Q. area
+*/
 function addQuestionsData(data, count) {
   if (currentIndex < count) {
     // Create heading Q.
@@ -178,6 +233,9 @@ function addQuestionsData(data, count) {
   }
 }
 
+/*
+  Check the answer 
+*/
 function checkAnswer(rAnswer) {
   let theAnswer = document.getElementsByName("questions");
   let choosenAnswer;
@@ -194,7 +252,9 @@ function checkAnswer(rAnswer) {
   }
 }
 
-// Handel bullets
+/*
+  Handel bullets
+*/
 function handlebullets() {
   let bulletsSpans = document.querySelectorAll(
     ".bullets .spans-container span"
@@ -232,8 +292,11 @@ function showResults(count) {
   }
 }
 
-// Countdown Timer
+/* 
+  Countdown Timer
+*/
 function countdown(duration, count) {
+  // To check if it's not the final Q.
   if (currentIndex < count) {
     let minutes, seconds;
     countdownInterval = setInterval(function () {
@@ -245,6 +308,7 @@ function countdown(duration, count) {
 
       countdownElement.innerHTML = `${minutes}:${seconds}`;
 
+      // Check if time finish and go to next Q.
       if (--duration < 0) {
         clearInterval(countdownInterval);
         submitButton.click();
