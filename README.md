@@ -4,7 +4,6 @@
 
 *  [Description](#description)
 *  [Technologies](#technologies)
-*  [License](#license)
 
 <hr>
 
@@ -24,8 +23,3 @@ Live Project :
 ## Technologies 
 
 [![My Skills](https://skillicons.dev/icons?i=css,html,js,&perline=10)](https://skillicons.dev)
-
-<hr>
-
-## License 
-[Udacity](http://udacity.com)
