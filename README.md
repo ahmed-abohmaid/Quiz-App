@@ -16,7 +16,7 @@ _Questions and answers are randomly shown to
 
 _The quiz has a timer
 
-Live Project 
+Live Project :
 <a href="https://ahmed-abohmaid.github.io/Quiz-App/index.html" alt="Quiz App">Quiz App</a>
 
 <hr>
